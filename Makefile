@@ -6,7 +6,7 @@
 #    By: tludwig <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/10 20:03:08 by tludwig           #+#    #+#              #
-#    Updated: 2020/05/13 23:15:38 by tludwig          ###   ########.fr        #
+#    Updated: 2020/05/20 22:03:52 by tludwig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,23 +20,35 @@ FUNC = ft_atoi ft_bzero ft_calloc ft_isalnum ft_isalpha ft_isascii ft_isdigit \
 	ft_lstiter ft_lstadd_back ft_lstadd_front ft_lstlast ft_lstnew ft_lstsize \
 	ft_lstclear ft_lstdelone ft_lstmap
 
+BONUS = ft_lstiter ft_lstadd_back ft_lstadd_front ft_lstlast ft_lstnew ft_lstsize \
+	ft_lstclear ft_lstdelone ft_lstmap
+
 OBJ = $(patsubst %,%.o, $(FUNC))
 
 SRC = $(patsubst %,%.c, $(FUNC))
 
-INCLUDES = ./includes
+B_OBJ = $(patsubst %,%.o, $(BONUS))
+
+B_SRC = $(patsubst %,%.c, $(BONUS))
 
 all: $(NAME)
 
 $(NAME):
-	gcc -I $(INCLUDES) -Wall -Wextra -Werror -c $(SRC)
+	gcc -Wall -Wextra -Werror -c $(SRC)
 	ar rc $(NAME) $(OBJ)
 	ranlib $(NAME)
 
 clean:
 	rm -f $(OBJ)
+	rm -f $(B_OBJ)
+
 
 fclean: clean
 	rm -f $(NAME)
+
+bonus:
+	gcc -Wall -Wextra -Werror -c $(B_SRC)
+	ar rc $(NAME) $(B_OBJ)
+	ranlib $(NAME)
 
 re: fclean all
