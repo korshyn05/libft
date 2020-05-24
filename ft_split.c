@@ -3,57 +3,87 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tludwig <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tludwig <tludwig@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/11 16:42:39 by tludwig           #+#    #+#             */
-/*   Updated: 2020/05/14 21:35:59 by tludwig          ###   ########.fr       */
+/*   Created: 2020/05/20 23:22:10 by tludwig           #+#    #+#             */
+/*   Updated: 2020/05/21 10:46:48 by tludwig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	count_words(const char *str, char c)
+static const char	*skip(const char *s, char c)
 {
-	size_t	count;
-	int		in_word;
+	while (*s == c)
+		s++;
+	return (s);
+}
 
-	in_word = 0;
+static int			count_words(char const *s, char c)
+{
+	int	count;
+
 	count = 0;
-	while (*str)
+	while (*s != '\0')
 	{
-		if (!in_word && *str != c)
+		s = skip(s, c);
+		if (*s != '\0')
+		{
+			while (*s != '\0' && *s != c)
+				s++;
 			count++;
-		in_word = (*str == c) ? 0 : 1;
-		str++;
+		}
 	}
 	return (count);
 }
 
-char		**ft_split(char const *s, char c)
+static int			free_mem(char **str)
 {
-	char	**arr;
-	size_t	in_word;
-	size_t	word_index;
-	size_t	i;
-	size_t	start;
+	int i;
+
+	i = 0;
+	while (str[i])
+		free(str[i++]);
+	free(str);
+	return (0);
+}
+
+static int			fill_str(char const *s, char c, char **res, int count)
+{
+	char	*str;
+	int		i;
+	int		m;
+
+	m = 0;
+	while (count > 0)
+	{
+		s = skip(s, c);
+		i = 0;
+		while (s[i] != c && s[i] != '\0')
+			i++;
+		if (!(str = (char *)malloc(sizeof(char) * (i) + 1)))
+			return (free_mem(res));
+		ft_strlcpy(str, s, i + 1);
+		res[m] = str;
+		s += i;
+		count--;
+		m++;
+	}
+	res[m] = NULL;
+	return (1);
+}
+
+char				**ft_split(char const *s, char c)
+{
+	char	**res;
+	int		words;
 
 	if (!s)
 		return (NULL);
-	if (!(arr = (char **)malloc((count_words(s, c) + 1) * sizeof(char *))))
+	words = count_words(s, c);
+	if (!(res = (char **)malloc(sizeof(char *) * (words + 1))))
 		return (NULL);
-	word_index = 0;
-	in_word = 0;
-	i = -1;
-	start = 0;
-	while (s[++i])
-	{
-		if (in_word && s[i] == c)
-			arr[word_index++] = ft_substr(s, start, i - start);
-		if (!in_word && s[i] != c)
-			start = i;
-		in_word = (s[i] == c) ? 0 : 1;
-	}
-	if (in_word)
-		arr[word_index] = ft_substr(s, start, i - start);
-	return (arr);
+	if (fill_str(s, c, res, words) == 0)
+		return (NULL);
+	return (res);
 }

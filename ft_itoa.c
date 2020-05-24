@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tludwig <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tludwig <tludwig@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/11 16:55:38 by tludwig           #+#    #+#             */
-/*   Updated: 2020/05/13 22:26:58 by tludwig          ###   ########.fr       */
+/*   Updated: 2020/05/24 15:52:48 by tludwig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,21 @@ static int	int_length(int n)
 char		*ft_itoa(int n)
 {
 	char	*str;
-	int		sign;
+	int		is_negative;
 	int		size;
 	int		i;
 
-	sign = (n < 0 ? 1 : 0);
+	is_negative = (n < 0 ? 1 : 0);
 	size = int_length(n);
 	if (!(str = (char *)malloc(sizeof(char) * size + 1)))
 		return (NULL);
-	if (sign == 1)
+	if (is_negative == 1)
 		str[0] = '-';
-	i = size + sign - 1;
+	i = size + is_negative - 1;
 	str[i] = '\0';
-	while (i >= sign)
+	while (i >= is_negative)
 	{
-		if (sign == 1)
+		if (is_negative == 1)
 			str[i--] = ((n % 10) * -1) + '0';
 		else
 			str[i--] = n % 10 + '0';
