@@ -6,7 +6,7 @@
 /*   By: tludwig <tludwig@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/06 19:57:44 by tludwig           #+#    #+#             */
-/*   Updated: 2020/05/27 00:00:47 by tludwig          ###   ########.fr       */
+/*   Updated: 2020/05/27 00:42:26 by tludwig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	*ft_memccpy(void *dest, const void *src, int c, size_t n)
 		*p1 = *p2;
 		p1++;
 		p2++;
-		if (*(p1 - 1) == (char)c)
+		if (*(p1 - 1) == (unsigned char)c)
 			return (p1);
 		n--;
 	}
