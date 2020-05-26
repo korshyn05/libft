@@ -5,48 +5,55 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tludwig <tludwig@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/11 16:55:38 by tludwig           #+#    #+#             */
-/*   Updated: 2020/05/24 15:52:48 by tludwig          ###   ########.fr       */
+/*   Created: 2020/05/26 00:11:24 by tludwig           #+#    #+#             */
+/*   Updated: 2020/05/26 23:59:53 by tludwig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	int_length(int n)
+static unsigned int	int_length(long n)
 {
-	int i;
+	unsigned int	i;
 
-	i = 1;
-	while (n / 10 != 0)
+	i = 0;
+	if (n == -2147483648)
+		return (10);
+	if (n < 0)
+		n *= -1;
+	while (n >= 10)
 	{
 		n = n / 10;
 		i++;
 	}
-	return (i);
+	return (i + 1);
 }
 
-char		*ft_itoa(int n)
+char				*ft_itoa(int n)
 {
-	char	*str;
-	int		is_negative;
-	int		size;
-	int		i;
+	char				*str;
+	unsigned int		i;
+	unsigned int		size;
+	long int			new_n;
 
-	is_negative = (n < 0 ? 1 : 0);
 	size = int_length(n);
-	if (!(str = (char *)malloc(sizeof(char) * size + 1)))
+	if (!(str = (char *)malloc(sizeof(char) * (size + 1 + (n < 0 ? 1 : 0)))))
 		return (NULL);
-	if (is_negative == 1)
-		str[0] = '-';
-	i = size + is_negative - 1;
-	str[i] = '\0';
-	while (i >= is_negative)
+	new_n = n;
+	i = 0;
+	if (n < 0)
 	{
-		if (is_negative == 1)
-			str[i--] = ((n % 10) * -1) + '0';
-		else
-			str[i--] = n % 10 + '0';
-		n /= 10;
+		str[i] = '-';
+		size++;
+		new_n *= -1;
 	}
+	i = size - 1;
+	while (new_n >= 10)
+	{
+		str[i--] = (char)(new_n % 10 + '0');
+		new_n /= 10;
+	}
+	str[i] = (char)(new_n % 10 + '0');
+	str[size] = '\0';
 	return (str);
 }
